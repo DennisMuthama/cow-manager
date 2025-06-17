@@ -14,7 +14,7 @@ Get in touch with a veterinarian directly from the platform if there are health 
 This application aims to enable data-informed decisions, improve herd health, maximize production, and foster strong relationships with veterinary care providers.
 
 📸 Screenshots
-![screenshots/Screenshot 2025-06-17 124015.png](<screenshots/Screenshot 2025-06-17 124015.png>)
+![screenshots/Screenshot 2025-06-17 124015.png]![alt text](<screenshots/Screenshot 2025-06-17 131537.png>)
 ![alt text](<screenshots/Screenshot 2025-06-17 124029.png>)
 ![alt text](<screenshots/Screenshot 2025-06-17 124243.png>)
 ![alt text](<screenshots/Screenshot 2025-06-17 124243.png>)
