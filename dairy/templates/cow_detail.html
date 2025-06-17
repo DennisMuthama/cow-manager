@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1>{{ cow.name }}</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ cow.name }}</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="col-auto">
+        <a href="{% url 'vet_list' %}" class="btn btn-danger">
+            <i class="bi bi-clipboard2-pulse"></i> Contact Veterinarian
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4 shadow">
+            {% if cow.image %}
+            <img src="{{ cow.image.url }}" class="card-img-top" alt="{{ cow.name }}">
+            {% else %}
+            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ cow.name }}</h5>
+                <ul class="list-group list-group-flush">
+                    {% if cow.breed %}
+                    <li class="list-group-item"><strong>Breed:</strong> {{ cow.breed }}</li>
+                    {% endif %}
+                    {% if cow.date_of_birth %}
+                    <li class="list-group-item"><strong>Age:</strong> {{ cow.age }} years</li>
+                    {% endif %}
+                    <li class="list-group-item"><strong>Added:</strong> {{ cow.created_at|date:"M d, Y" }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card mb-4 shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Milk Production</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ milk_form|crispy }}
+                    <button type="submit" name="milk_submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Record Milk
+                    </button>
+                </form>
+
+                <hr>
+
+                <h6>Recent Milk Records</h6>
+                {% if milk_productions %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Amount (L)</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for milk in milk_productions %}
+                                <tr>
+                                    <td>{{ milk.date|date:"M d, Y" }}</td>
+                                    <td>{{ milk.amount }}</td>
+                                    <td>{{ milk.notes|default:"-" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No milk production records yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">Health Records</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ health_form|crispy }}
+                    <button type="submit" name="health_submit" class="btn btn-warning">
+                        <i class="bi bi-save"></i> Record Health Issue
+                    </button>
+                </form>
+
+                <hr>
+
+                <h6>Recent Health Records</h6>
+                {% if health_records %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Symptoms</th>
+                                    <th>Diagnosis</th>
+                                    <th>Treatment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for health in health_records %}
+                                <tr class="{% if health.is_urgent %}table-danger{% endif %}">
+                                    <td>{{ health.date|date:"M d, Y" }}</td>
+                                    <td>{{ health.symptoms }}</td>
+                                    <td>{{ health.diagnosis|default:"-" }}</td>
+                                    <td>{{ health.treatment|default:"-" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No health records yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

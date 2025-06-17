@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Register | Dairy Manager{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Messages with auto-dismiss -->
+    {% if messages %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert" id="logoutAlert">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+    
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3>Create New Account</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary w-100 mt-3">
+                            <i class="bi bi-person-plus"></i> Register
+                        </button>
+                    </form>
+                    <div class="text-center mt-3">
+                        Already have an account? <a href="{% url 'login' %}">Login here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom styles to match your theme */
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .card-header {
+        padding: 1.25rem;
+    }
+    .form-control:focus {
+        border-color: #4e73df;
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+    a {
+        color: #4e73df;
+    }
+    a:hover {
+        color: #2e59d9;
+    }
+    .btn-primary {
+        background-color: #4e73df;
+        border-color: #4e73df;
+    }
+    .btn-primary:hover {
+        background-color: #2e59d9;
+        border-color: #2653d4;
+    }
+</style>
+<script>
+    // Auto-dismiss alert after 5 seconds or when page refreshes
+    document.addEventListener('DOMContentLoaded', function() {
+        const alert = document.getElementById('logoutAlert');
+        if (alert) {
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+            
+            // Remove from session storage so it doesn't show on refresh
+            if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
+                alert.remove();
+            }
+        }
+    });
+</script>
+{% endblock %}
